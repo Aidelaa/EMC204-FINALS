@@ -3,9 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class ChangeScene : MonoBehaviour
 {
-    public void GoToNextScene()
+    public void LoadSceneByName(string sceneName)
     {
-        SceneManager.LoadScene("NextScene");
-        
+        SceneManager.LoadScene(sceneName);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

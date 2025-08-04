@@ -12,12 +12,26 @@ public class HoleMovement : MonoBehaviour
     private Vector3 minBounds;
     private Vector3 maxBounds;
 
+    public static HoleMovement Instance;
+
     void Awake()
     {
+        // Singleton check to prevent duplicates across scenes
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // destroy this duplicate
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject); // keep hole when changing scenes
+
+        // Your original Rigidbody setup
         rb = GetComponent<Rigidbody>();
-        rb.interpolation = RigidbodyInterpolation.Interpolate; // For smoother physics updates
-        rb.isKinematic = true;  // Ensure the Rigidbody is kinematic for controlled movement
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.isKinematic = true;
     }
+
 
     void Start()
     {

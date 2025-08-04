@@ -1,45 +1,43 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
-    public TextMeshProUGUI scoreText;  // Reference to the UI text
+    public TextMeshProUGUI scoreText;
     private int score = 0;
 
-    void Start()
+    private void Start()
     {
-        // Check if the scoreText is assigned
-        if (scoreText == null)
-        {
-            Debug.LogError("ScoreText is not assigned in the Inspector.");
-            return;
-        }
-
-        UpdateScoreText();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        ResetScore();
     }
 
     public void AddScore(int amount)
     {
-        // Ensure that the score is properly updated
         score += amount;
-
-        // Log the updated score for debugging purposes
-        Debug.Log("Score added: " + amount + ", New score: " + score);
-
-        // Update the UI with the new score
         UpdateScoreText();
     }
 
-    void UpdateScoreText()
+    private void UpdateScoreText()
     {
-        // Check if scoreText is assigned and update the UI text
         if (scoreText != null)
-        {
-            scoreText.text = "Score: " + score;  // Update the score UI
-        }
-        else
-        {
-            Debug.LogError("ScoreText reference is missing!");
-        }
+            scoreText.text = "Score: " + score;
+    }
+
+    private void ResetScore()
+    {
+        score = 0;
+        UpdateScoreText();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ResetScore();
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

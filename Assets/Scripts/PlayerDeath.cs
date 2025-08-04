@@ -1,55 +1,55 @@
 ﻿using UnityEngine;
-using TMPro;  // Import TextMeshPro namespace
+using TMPro;
 using System.Collections;
 
 public class PlayerDeath : MonoBehaviour
 {
-    [HideInInspector] public Vector3 initialPosition;  // Store the player's initial position
-    [HideInInspector] public Vector3 initialScale;     // Store the player's initial scale
+    [HideInInspector] public Vector3 initialPosition;
+    [HideInInspector] public Vector3 initialScale;
 
     [Header("Respawn Settings")]
-    public float respawnTime = 5f;        // Time to wait before respawning (seconds)
-    public TextMeshProUGUI countdownText; // Reference to the UI TextMeshPro component for countdown
+    public float respawnTime = 5f;
+    public TextMeshProUGUI countdownText;
 
-    private bool isDead = false;          // Is the player dead or not
-    private bool isRespawning = false;    // Is the player currently respawning?
-    private float timeRemaining;          // Track the remaining time for the respawn countdown
+    [Header("Player Components")]
+    public GameObject playerVisuals; // Drag your player mesh or visuals here in Inspector
+
+    private bool isDead = false;
+    private bool isRespawning = false;
+    private float timeRemaining;
 
     void Start()
     {
-        // Remember the initial position and scale of the player
         initialPosition = transform.position;
         initialScale = transform.localScale;
-
-        // Initialize the respawn countdown time
         timeRemaining = respawnTime;
 
-        // Hide the countdown UI initially
         if (countdownText != null)
-            countdownText.gameObject.SetActive(false);  // Hide countdown text at start
+            countdownText.gameObject.SetActive(false);
+
+        if (playerVisuals == null)
+            Debug.LogWarning("Player visuals not assigned in PlayerDeath script!");
     }
 
     void Update()
     {
-        // If the player is respawning, update the timer
         if (isRespawning && timeRemaining > 0)
         {
-            timeRemaining -= Time.deltaTime;  // Subtract time each frame
-            countdownText.text = $"Respawning in {Mathf.CeilToInt(timeRemaining)}";  // Update countdown UI
+            timeRemaining -= Time.deltaTime;
+            countdownText.text = $"Respawning in {Mathf.CeilToInt(timeRemaining)}";
 
             if (timeRemaining <= 0)
             {
                 timeRemaining = 0;
                 isRespawning = false;
-                countdownText.gameObject.SetActive(false);  // Hide countdown when time is up
-                Respawn();  // Call the respawn function when time is up
+                countdownText.gameObject.SetActive(false);
+                Respawn();
             }
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // Check if the player was eaten by a larger enemy
         if (isDead || isRespawning) return;
 
         if (other.CompareTag("EnemyHole") && other.transform.localScale.x > transform.localScale.x)
@@ -60,39 +60,36 @@ public class PlayerDeath : MonoBehaviour
 
     IEnumerator DieAndRespawn()
     {
-        // Set flags to indicate the player is dead and respawning
         isDead = true;
         isRespawning = true;
+        timeRemaining = respawnTime;
 
-        // Hide the player object while respawning
-        gameObject.SetActive(false);  // Hide the player during respawn countdown
+        // Hide only visuals (NOT the whole GameObject)
+        if (playerVisuals != null)
+            playerVisuals.SetActive(false);
 
-        // Show countdown UI
-        countdownText.gameObject.SetActive(true);
+        if (countdownText != null)
+            countdownText.gameObject.SetActive(true);
 
-        // Wait for the respawn time to complete
         while (isRespawning && timeRemaining > 0)
         {
-            yield return null;  // Wait for the next frame
+            yield return null;
         }
 
-        // After respawn time, call the Respawn function to reset the player
-        Respawn();
+        // Respawn is triggered in Update() when timeRemaining <= 0
     }
 
     void Respawn()
     {
-        // Reset position & scale when the respawn countdown reaches zero
         transform.position = initialPosition;
         transform.localScale = initialScale;
 
-        // Reactivate the player object
-        gameObject.SetActive(true);  // Show the player after respawn
+        if (playerVisuals != null)
+            playerVisuals.SetActive(true);
 
-        // Reset flags after respawn
         isDead = false;
         isRespawning = false;
 
-        Debug.Log("Player respawned, continuing...");
+        Debug.Log("Player respawned.");
     }
 }

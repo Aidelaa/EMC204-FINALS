@@ -1,15 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class ObjectSpawner : MonoBehaviour
 {
-    public GameObject objectPrefab;
-    public GameObject groundPlane; // assign your plane here in the Inspector
+    public GameObject[] objectPrefabs;
+    public GameObject groundPlane;
+    public float spawnInterval = 2f;
 
-    public float spawnInterval = 2f; // time in seconds between spawns
-
-    // Array of possible scales: 0.5, 1, 1.5, 2, 2.5, etc.
-    private float[] scaleValues = { 0.5f, 1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f };
+    // Scale values used for spawning
+    private float[] scaleValues = { 0.2f, 0.3f, 0.4f, 0.5f, 1f, 1.5f, 2f, 2.5f, 3f, 3.5f, 4f };
 
     void Start()
     {
@@ -27,7 +26,7 @@ public class ObjectSpawner : MonoBehaviour
 
     void SpawnSingleObject()
     {
-        if (groundPlane == null) return;
+        if (groundPlane == null || objectPrefabs.Length == 0) return;
 
         Renderer groundRenderer = groundPlane.GetComponent<Renderer>();
         if (groundRenderer == null) return;
@@ -39,10 +38,35 @@ public class ObjectSpawner : MonoBehaviour
         float z = Random.Range(planeCenter.z - planeSize.z / 2, planeCenter.z + planeSize.z / 2);
 
         Vector3 spawnPosition = new Vector3(x, 0.5f, z);
-        GameObject obj = Instantiate(objectPrefab, spawnPosition, Quaternion.identity);
 
-        // --- Randomly select a scale from the predefined array ---
+        // Select a random prefab and scale
+        GameObject selectedPrefab = objectPrefabs[Random.Range(0, objectPrefabs.Length)];
         float randomScale = scaleValues[Random.Range(0, scaleValues.Length)];
-        obj.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+
+        // Spawn and apply scale
+        GameObject obj = Instantiate(selectedPrefab, spawnPosition, Quaternion.identity);
+        obj.transform.localScale = Vector3.one * randomScale;
+
+        // Assign growth value
+        float growth = GetGrowthValue(randomScale);
+
+        // Add or get ObjectGrowth script and assign value
+        ObjectGrowth growthComp = obj.GetComponent<ObjectGrowth>();
+        if (growthComp == null)
+        {
+            growthComp = obj.AddComponent<ObjectGrowth>();
+        }
+        growthComp.growthAmount = growth;
+    }
+
+    float GetGrowthValue(float scale)
+    {
+        // Define growth logic based on scale
+        if (scale <= 0.2f) return 0.05f;
+        else if (scale <= 0.3f) return 0.07f;
+        else if (scale <= 0.5f) return -0.1f;
+        else if (scale <= 1f) return -0.2f;
+        else if (scale <= 2f) return -0.3f;
+        else return -0.4f; // For very large objects
     }
 }

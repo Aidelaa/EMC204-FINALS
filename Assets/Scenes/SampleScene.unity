@@ -148,9 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63100c41af8db9b4b8afb3877acce633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefab: {fileID: 4020891753002395077, guid: ba86e5dd3a43191429c97d8ac584b146, type: 3}
+  objectPrefabs:
+  - {fileID: 4020891753002395077, guid: ba86e5dd3a43191429c97d8ac584b146, type: 3}
+  - {fileID: 4020891753002395077, guid: 3145c8a4bf8549442b2b834b02a36925, type: 3}
+  - {fileID: 4020891753002395077, guid: 1a21ce3bf5ebbd64d8da2fda246da06a, type: 3}
+  - {fileID: 4020891753002395077, guid: 85641d6c97757a147be7a4002733cdc8, type: 3}
   groundPlane: {fileID: 98350216}
-  spawnInterval: 1
+  spawnInterval: 0.5
 --- !u!4 &30088801
 Transform:
   m_ObjectHideFlags: 0
@@ -822,7 +826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 3728057428653802082, guid: dd9c65fdff8a2134ea2dbf97e4a6f1c9, type: 3}
   groundPlane: {fileID: 98350216}
-  respawnDelay: 5
+  respawnDelay: 1
 --- !u!4 &545120938
 Transform:
   m_ObjectHideFlags: 0
@@ -903,8 +907,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -971,7 +975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 356.5, y: 333.2}
+  m_AnchoredPosition: {x: -407, y: -888.1}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &832575517
@@ -1599,7 +1603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 575085664}
-  startTime: 60
+  startTime: 120
   spawners:
   - {fileID: 30088800}
   - {fileID: 545120937}

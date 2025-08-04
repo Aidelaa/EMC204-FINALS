@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7516662214462477029}
   - component: {fileID: 7060843450332518826}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Food 3
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4020891753002395077}
-  m_Mesh: {fileID: 1319789488962769195, guid: 2362ccca081bd264f9d24275f9bce662, type: 3}
+  m_Mesh: {fileID: -3407594731796387060, guid: 8035813607815c6408938db76fa498f0, type: 3}
 --- !u!23 &5333889214932465519
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -6538903991835684241, guid: 2362ccca081bd264f9d24275f9bce662, type: 3}
+  - {fileID: -6538903991835684241, guid: 4a8a1ba1cff84b24ba679995c102cb64, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,7 +107,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 0.3, y: 0.3, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &7060843450332518826
 Rigidbody:

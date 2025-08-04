@@ -1,11 +1,12 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Collider))]
 public class HoleSwallow : MonoBehaviour
 {
-    [Tooltip("How much the hole grows each time it swallows something")]
-    public float growAmount = 0.2f;
+    [Tooltip("Default growth if no ObjectGrowth is found")]
+    public float defaultGrowAmount = 0.2f;
+
     [Tooltip("Units per second at which objects fall into the hole")]
     public float fallSpeed = 2f;
 
@@ -15,7 +16,7 @@ public class HoleSwallow : MonoBehaviour
     void Start()
     {
         holeParent = transform.parent;
-        scoreManager = Object.FindAnyObjectByType<ScoreManager>();  // <- updated here
+        scoreManager = Object.FindAnyObjectByType<ScoreManager>();
         GetComponent<Collider>().isTrigger = true;
     }
 
@@ -59,18 +60,55 @@ public class HoleSwallow : MonoBehaviour
         }
 
         target.transform.position = targetPos;
+
+        float growAmount = GetGrowthFromObject(target);
+        GrowHoleBasedOnObject(target); // ✅ Move this BEFORE destroy
         Destroy(target);
-        GrowHole();
     }
 
-    void GrowHole()
+
+    float GetGrowthFromObject(GameObject obj)
     {
+        ObjectGrowth growth = obj.GetComponent<ObjectGrowth>();
+        if (growth != null)
+        {
+            return growth.growthAmount;
+        }
+        return defaultGrowAmount;
+    }
+
+    void GrowHoleBasedOnObject(GameObject swallowedObject)
+    {
+        float objectSize = swallowedObject.transform.lossyScale.x;
+
+        float growthAmount = 0f;
+        if (objectSize <= 0.2f)
+            growthAmount = 0.05f;
+        else if (objectSize <= 0.3f)
+            growthAmount = 0.07f;
+        else if (objectSize <= 0.5f)
+            growthAmount = 0.1f;
+        else
+            growthAmount = 0.15f;
+
         Vector3 s = holeParent.localScale;
-        s.x += growAmount;
-        s.z += growAmount;
-        holeParent.localScale = new Vector3(s.x, 1f, s.z);
+        s.x += growthAmount;
+        s.z += growthAmount;
+        holeParent.localScale = new Vector3(s.x, s.y, s.z);
 
         if (scoreManager != null)
             scoreManager.AddScore(1);
+
+        Debug.Log("Swallowed object size: " + objectSize);
+        Debug.Log("Hole scale after growth: " + holeParent.localScale);
     }
+
+
+
+
+    void Awake()
+    {
+        DontDestroyOnLoad(transform.root.gameObject);
+    }
+
 }

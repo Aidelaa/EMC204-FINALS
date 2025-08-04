@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7516662214462477029}
   - component: {fileID: 7060843450332518826}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Cube 11
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4020891753002395077}
-  m_Mesh: {fileID: 1319789488962769195, guid: 2362ccca081bd264f9d24275f9bce662, type: 3}
+  m_Mesh: {fileID: 7690951674739159930, guid: a8ce2f2397517014893341fef6be5a96, type: 3}
 --- !u!23 &5333889214932465519
 MeshRenderer:
   m_ObjectHideFlags: 0
